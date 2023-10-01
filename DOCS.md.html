@@ -1,0 +1,51 @@
+<h2>Introduction</h2>
+
+<p>LAPP is an esoteric programming language purpose of which is to have as few features as possible and be as unreadable as possible.</p>
+
+<h2>Programs</h2>
+
+<p>Each program consists of two or three lines.</p>
+
+<p>First line contains 15 <em>instructions</em>, encoded in <code>base36</code> and split by whitespace characters.
+The second line contains 15 cells of the <em>initial memory</em> of the program, likewise encoded in <code>base36</code> and split by whitespace characters.
+If the third line is present and not empty, the program is considered <em>sequential</em>. <em>Sequential</em> programs are deprecated and supported only by the <em>LAPP interpreter</em>. <em>LAPP compiler</em> does not support sequential programs.</p>
+
+<h3>Instructions</h3>
+
+<p>Each instruction is an 32-bit integer, whose bits represent different instruction parts.
+Instruction structure is as follows:</p>
+
+<p>|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;|
+|                                                                          Instruction (32 bits)                                                            |
+|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|
+|Active memory cell (4 bits)|Jump Target (4 bits)|Memory Increment (2 bits)|Jump condition  (2 bits)|Else Jump (4 bits)|Comparative/Setter constant(16 bits)|
+|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;|</p>
+
+<h4>Active memory cell</h4>
+
+<p>Active memory cell is represented as its index in the memory field. It&rsquo;s the memory cell the instruction will work with.
+This includes incrementing,decrementing,setting and comparing.</p>
+
+<h4>Jump target</h4>
+
+<p>The index of the instruction the executing program will jump to after the evaluation of the current one, if the condition is met.
+If the jump target is 16 and jump condition is met, the program will end.</p>
+
+<h4>Memory Increment</h4>
+
+<p>Memory Increment describes how the active memory cell is to be changed.
+It has four different possible values:
+  0 - don&rsquo;t change the memory cell
+  1 - increase the memory cell value by 1
+  2 - decrease the memory cell value by 1
+  3 - set the memory cell value to the Setter Constant
+The Setter constant consist of the last 16 bits of the instruction.</p>
+
+<h5>Jump Condition</h5>
+
+<p>Jump Condition describes the condition for deciding between jumping to Jump target or Else Jump.
+It has four possible values:
+ 0 - Always True
+ 1 - Memory Cell == Comparative Constant
+ 2 - Memory Cell >  Comparative Constant
+ 3 - Memory Cell &lt;  Comparative Constant</p>
